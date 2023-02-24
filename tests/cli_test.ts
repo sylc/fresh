@@ -332,8 +332,6 @@ Deno.test("fresh-init error(help)", async function (t) {
     async () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "init.ts"],
-        stdin: "null",
-        stderr: "piped",
       });
       const { code, stderr } = await cliProcess.output();
       assertEquals(code, 1);
