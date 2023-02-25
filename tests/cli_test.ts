@@ -165,6 +165,7 @@ Deno.test({
         await browser.close();
 
         await lines.cancel();
+        await serverProcess.stdout.cancel()
         serverProcess.kill("SIGTERM");
       },
     });
@@ -320,6 +321,7 @@ Deno.test({
         await browser.close();
 
         await lines.cancel();
+        await serverProcess.stdout.cancel()
         serverProcess.kill("SIGTERM");
       },
     });
