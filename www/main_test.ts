@@ -7,7 +7,7 @@ Deno.test("CORS should not set on GET /fresh-badge.svg", {
   const serverProcess = new Deno.Command(Deno.execPath(), {
     args: ["run", "-A", "./main.ts"],
     stdout: "piped",
-    stderr: "inherit",
+    // stderr: "inherit",
   }).spawn();
 
   const decoder = new TextDecoderStream();
@@ -32,6 +32,7 @@ Deno.test("CORS should not set on GET /fresh-badge.svg", {
   assertEquals(res.headers.get("cross-origin-resource-policy"), null);
 
   await lines.cancel();
+  await decoder.readable.cancel()
   // await serverProcess.stderr.cancel()
   // await serverProcess.stdout.cancel()
   serverProcess.kill("SIGTERM");
