@@ -114,58 +114,61 @@ Deno.test({
       name: "start up the server and access the root page",
       ignore: true,
       async fn() {
-      const serverProcess = new Deno.Command(Deno.execPath(), {
-        args: ["run", "-A", "--check", "main.ts"],
-        stdout: "piped",
-        cwd: tmpDirName,
-      }).spawn();
+        const serverProcess = new Deno.Command(Deno.execPath(), {
+          args: ["run", "-A", "--check", "main.ts"],
+          stdout: "piped",
+          cwd: tmpDirName,
+        }).spawn();
 
-      const lines = serverProcess.stdout
-        .pipeThrough(new TextDecoderStream())
-        .pipeThrough(new TextLineStream());
+        const lines = serverProcess.stdout
+          .pipeThrough(new TextDecoderStream())
+          .pipeThrough(new TextLineStream());
 
-      let started = false;
-      for await (const line of lines) {
-        console.log(line);
-        if (line.includes("Listening on http://")) {
-          started = true;
-          break;
+        let started = false;
+        for await (const line of lines) {
+          console.log(line);
+          if (line.includes("Listening on http://")) {
+            started = true;
+            break;
+          }
         }
-      }
-      if (!started) {
-        throw new Error("Server didn't start up");
-      }
+        if (!started) {
+          throw new Error("Server didn't start up");
+        }
 
-      await delay(100);
+        await delay(100);
 
-      // Access the root page
-      const res = await fetch("http://localhost:8000");
-      await res.body?.cancel();
-      assertEquals(res.status, Status.OK);
+        // Access the root page
+        const res = await fetch("http://localhost:8000");
+        await res.body?.cancel();
+        assertEquals(res.status, Status.OK);
 
-      // verify the island is revived.
-      const browser = await puppeteer.launch({
-        args: ["--no-sandbox"],
-      });
-      const page = await browser.newPage();
-      await page.goto("http://localhost:8000", { waitUntil: "networkidle2" });
-      const counter = await page.$("body > div > div > p");
-      let counterValue = await counter?.evaluate((el) => el.textContent);
-      assert(counterValue === "3");
+        // verify the island is revived.
+        const browser = await puppeteer.launch({
+          args: ["--no-sandbox"],
+        });
+        const page = await browser.newPage();
+        await page.goto("http://localhost:8000", { waitUntil: "networkidle2" });
+        const counter = await page.$("body > div > div > p");
+        let counterValue = await counter?.evaluate((el) => el.textContent);
+        assert(counterValue === "3");
 
-      const buttonPlus = await page.$("body > div > div > button:nth-child(3)");
-      await buttonPlus?.click();
+        const buttonPlus = await page.$(
+          "body > div > div > button:nth-child(3)",
+        );
+        await buttonPlus?.click();
 
-      await delay(100);
+        await delay(100);
 
-      counterValue = await counter?.evaluate((el) => el.textContent);
-      assert(counterValue === "4");
-      await page.close();
-      await browser.close();
+        counterValue = await counter?.evaluate((el) => el.textContent);
+        assert(counterValue === "4");
+        await page.close();
+        await browser.close();
 
-      await lines.cancel();
-      serverProcess.kill("SIGTERM");
-    }});
+        await lines.cancel();
+        serverProcess.kill("SIGTERM");
+      },
+    });
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
@@ -261,64 +264,67 @@ Deno.test({
 
     await t.step({
       name: "start up the server and access the root page",
-    ignore: true,
-    async fn() {
-      const serverProcess = new Deno.Command(Deno.execPath(), {
-        args: ["run", "-A", "--check", "main.ts"],
-        stdout: "piped",
-        cwd: tmpDirName,
-      }).spawn();
+      ignore: true,
+      async fn() {
+        const serverProcess = new Deno.Command(Deno.execPath(), {
+          args: ["run", "-A", "--check", "main.ts"],
+          stdout: "piped",
+          cwd: tmpDirName,
+        }).spawn();
 
-      const lines = serverProcess.stdout
-        .pipeThrough(new TextDecoderStream())
-        .pipeThrough(new TextLineStream());
+        const lines = serverProcess.stdout
+          .pipeThrough(new TextDecoderStream())
+          .pipeThrough(new TextLineStream());
 
-      let started = false;
-      for await (const line of lines) {
-        console.log(line);
-        if (line.includes("Listening on http://")) {
-          started = true;
-          break;
+        let started = false;
+        for await (const line of lines) {
+          console.log(line);
+          if (line.includes("Listening on http://")) {
+            started = true;
+            break;
+          }
         }
-      }
-      if (!started) {
-        throw new Error("Server didn't start up");
-      }
+        if (!started) {
+          throw new Error("Server didn't start up");
+        }
 
-      await delay(100);
+        await delay(100);
 
-      // Access the root page
-      const res = await fetch("http://localhost:8000");
-      await res.body?.cancel();
-      assertEquals(res.status, Status.OK);
+        // Access the root page
+        const res = await fetch("http://localhost:8000");
+        await res.body?.cancel();
+        assertEquals(res.status, Status.OK);
 
-      // verify the island is revived.
-      const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
-      const page = await browser.newPage();
-      await page.goto("http://localhost:8000", { waitUntil: "networkidle2" });
+        // verify the island is revived.
+        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        const page = await browser.newPage();
+        await page.goto("http://localhost:8000", { waitUntil: "networkidle2" });
 
-      const counter = await page.$("body > div > div > p");
-      let counterValue = await counter?.evaluate((el) => el.textContent);
-      assert(counterValue === "3");
+        const counter = await page.$("body > div > div > p");
+        let counterValue = await counter?.evaluate((el) => el.textContent);
+        assert(counterValue === "3");
 
-      const fontWeight = await counter?.evaluate((el) =>
-        getComputedStyle(el).fontWeight
-      );
-      assertEquals(fontWeight, "700");
+        const fontWeight = await counter?.evaluate((el) =>
+          getComputedStyle(el).fontWeight
+        );
+        assertEquals(fontWeight, "700");
 
-      const buttonPlus = await page.$("body > div > div > button:nth-child(3)");
-      await buttonPlus?.click();
+        const buttonPlus = await page.$(
+          "body > div > div > button:nth-child(3)",
+        );
+        await buttonPlus?.click();
 
-      await delay(100);
+        await delay(100);
 
-      counterValue = await counter?.evaluate((el) => el.textContent);
-      assert(counterValue === "4");
-      await page.close();
-      await browser.close();
+        counterValue = await counter?.evaluate((el) => el.textContent);
+        assert(counterValue === "4");
+        await page.close();
+        await browser.close();
 
-      await lines.cancel();
-      serverProcess.kill("SIGTERM");
-    }});
+        await lines.cancel();
+        serverProcess.kill("SIGTERM");
+      },
+    });
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
