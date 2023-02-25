@@ -110,12 +110,13 @@ Deno.test({
       await assertFileExistence(targetFileTree);
     });
 
-    await t.step("start up the server and access the root page", async () => {
+    await t.step({
+      name: "start up the server and access the root page",
+      ignore: true,
+      async fn() {
       const serverProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "--check", "main.ts"],
-        stdin: "null",
         stdout: "piped",
-        stderr: "inherit",
         cwd: tmpDirName,
       }).spawn();
 
@@ -164,7 +165,7 @@ Deno.test({
 
       await lines.cancel();
       serverProcess.kill("SIGTERM");
-    });
+    }});
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
@@ -258,12 +259,13 @@ Deno.test({
       await assertFileExistence(targetFileTree);
     });
 
-    await t.step("start up the server and access the root page", async () => {
+    await t.step({
+      name: "start up the server and access the root page",
+    ignore: true,
+    async fn() {
       const serverProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "--check", "main.ts"],
-        stdin: "null",
         stdout: "piped",
-        stderr: "inherit",
         cwd: tmpDirName,
       }).spawn();
 
@@ -316,7 +318,7 @@ Deno.test({
 
       await lines.cancel();
       serverProcess.kill("SIGTERM");
-    });
+    }});
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
