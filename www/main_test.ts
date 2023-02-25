@@ -2,6 +2,7 @@ import { assertEquals } from "$std/testing/asserts.ts";
 import { TextLineStream } from "$std/streams/text_line_stream.ts";
 
 Deno.test("CORS should not set on GET /fresh-badge.svg", {
+  sanitizeOps: true,
   sanitizeResources: false,
 }, async () => {
   const serverProcess = new Deno.Command(Deno.execPath(), {
