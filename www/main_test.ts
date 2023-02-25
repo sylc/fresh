@@ -32,8 +32,8 @@ Deno.test("CORS should not set on GET /fresh-badge.svg", {
   assertEquals(res.headers.get("cross-origin-resource-policy"), null);
 
   await lines.cancel();
-  await decoder.readable.cancel()
-  // await serverProcess.stderr.cancel()
-  // await serverProcess.stdout.cancel()
+  await decoder.readable.cancel();
+  await serverProcess.stderr.cancel();
+  await serverProcess.stdout.cancel();
   serverProcess.kill("SIGTERM");
 });
