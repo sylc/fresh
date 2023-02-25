@@ -41,7 +41,7 @@ Deno.test({
     // Preparation
     const tmpDirName = await Deno.makeTempDir();
 
-    await t.step("execute init command", async () => {
+    await t.step("execute init command", () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: [
           "run",
@@ -52,7 +52,7 @@ Deno.test({
         stdin: "null",
         stdout: "null",
       });
-      const { code } = await cliProcess.output();
+      const { code } = cliProcess.outputSync();
       assertEquals(code, 0);
     });
 
@@ -182,7 +182,7 @@ Deno.test({
     // Preparation
     const tmpDirName = await Deno.makeTempDir();
 
-    await t.step("execute init command", async () => {
+    await t.step("execute init command", () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: [
           "run",
@@ -195,7 +195,7 @@ Deno.test({
         stdin: "null",
         stdout: "null",
       });
-      const { code } = await cliProcess.output();
+      const { code } = cliProcess.outputSync();
       assertEquals(code, 0);
     });
 
@@ -337,11 +337,11 @@ Deno.test("fresh-init error(help)", async function (t) {
 
   await t.step(
     "execute invalid init command (deno run -A init.ts)",
-    async () => {
+    () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "init.ts"],
       });
-      const { code, stderr } = await cliProcess.output();
+      const { code, stderr } = cliProcess.outputSync();
       assertEquals(code, 1);
 
       const errorString = new TextDecoder().decode(stderr);
@@ -351,11 +351,11 @@ Deno.test("fresh-init error(help)", async function (t) {
 
   await t.step(
     "execute invalid init command (deno run -A init.ts -f)",
-    async () => {
+    () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "init.ts", "-f"],
       });
-      const { code, stderr } = await cliProcess.output();
+      const { code, stderr } = cliProcess.outputSync();
       assertEquals(code, 1);
 
       const errorString = new TextDecoder().decode(stderr);
@@ -365,11 +365,11 @@ Deno.test("fresh-init error(help)", async function (t) {
 
   await t.step(
     "execute invalid init command (deno run -A init.ts --foo)",
-    async () => {
+    () => {
       const cliProcess = new Deno.Command(Deno.execPath(), {
         args: ["run", "-A", "init.ts", "--foo"],
       });
-      const { code, stderr } = await cliProcess.output();
+      const { code, stderr } = cliProcess.outputSync();
       assertEquals(code, 1);
 
       const errorString = new TextDecoder().decode(stderr);
