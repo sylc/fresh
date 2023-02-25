@@ -112,7 +112,6 @@ Deno.test({
 
     await t.step({
       name: "start up the server and access the root page",
-      ignore: true,
       async fn() {
         const serverProcess = new Deno.Command(Deno.execPath(), {
           args: ["run", "-A", "--check", "main.ts"],
