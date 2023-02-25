@@ -332,48 +332,52 @@ Deno.test({
   sanitizeResources: false,
 });
 
-Deno.test("fresh-init error(help)", async function (t) {
-  const includeText = "fresh-init";
+Deno.test({
+  name: "fresh-init error(help)",
+  async fn(t) {
+    const includeText = "fresh-init";
 
-  await t.step(
-    "execute invalid init command (deno run -A init.ts)",
-    () => {
-      const cliProcess = new Deno.Command(Deno.execPath(), {
-        args: ["run", "-A", "init.ts"],
-      });
-      const { code, stderr } = cliProcess.outputSync();
-      assertEquals(code, 1);
+    await t.step(
+      "execute invalid init command (deno run -A init.ts)",
+      () => {
+        const cliProcess = new Deno.Command(Deno.execPath(), {
+          args: ["run", "-A", "init.ts"],
+        });
+        const { code, stderr } = cliProcess.outputSync();
+        assertEquals(code, 1);
 
-      const errorString = new TextDecoder().decode(stderr);
-      assertStringIncludes(errorString, includeText);
-    },
-  );
+        const errorString = new TextDecoder().decode(stderr);
+        assertStringIncludes(errorString, includeText);
+      },
+    );
 
-  await t.step(
-    "execute invalid init command (deno run -A init.ts -f)",
-    () => {
-      const cliProcess = new Deno.Command(Deno.execPath(), {
-        args: ["run", "-A", "init.ts", "-f"],
-      });
-      const { code, stderr } = cliProcess.outputSync();
-      assertEquals(code, 1);
+    await t.step(
+      "execute invalid init command (deno run -A init.ts -f)",
+      () => {
+        const cliProcess = new Deno.Command(Deno.execPath(), {
+          args: ["run", "-A", "init.ts", "-f"],
+        });
+        const { code, stderr } = cliProcess.outputSync();
+        assertEquals(code, 1);
 
-      const errorString = new TextDecoder().decode(stderr);
-      assertStringIncludes(errorString, includeText);
-    },
-  );
+        const errorString = new TextDecoder().decode(stderr);
+        assertStringIncludes(errorString, includeText);
+      },
+    );
 
-  await t.step(
-    "execute invalid init command (deno run -A init.ts --foo)",
-    () => {
-      const cliProcess = new Deno.Command(Deno.execPath(), {
-        args: ["run", "-A", "init.ts", "--foo"],
-      });
-      const { code, stderr } = cliProcess.outputSync();
-      assertEquals(code, 1);
+    await t.step(
+      "execute invalid init command (deno run -A init.ts --foo)",
+      () => {
+        const cliProcess = new Deno.Command(Deno.execPath(), {
+          args: ["run", "-A", "init.ts", "--foo"],
+        });
+        const { code, stderr } = cliProcess.outputSync();
+        assertEquals(code, 1);
 
-      const errorString = new TextDecoder().decode(stderr);
-      assertStringIncludes(errorString, includeText);
-    },
-  );
+        const errorString = new TextDecoder().decode(stderr);
+        assertStringIncludes(errorString, includeText);
+      },
+    );
+  },
+  sanitizeOps: false,
 });
