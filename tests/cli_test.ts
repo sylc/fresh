@@ -125,7 +125,6 @@ Deno.test({
 
       let started = false;
       for await (const line of lines) {
-        console.log(line);
         if (line.includes("Listening on http://")) {
           started = true;
           break;
@@ -164,11 +163,11 @@ Deno.test({
 
       await lines.cancel();
       serverProcess.kill("SIGTERM");
+      await delay(100);
     });
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
-  sanitizeOps: false,
   sanitizeResources: false,
 });
 
@@ -273,7 +272,6 @@ Deno.test({
 
       let started = false;
       for await (const line of lines) {
-        console.log(line);
         if (line.includes("Listening on http://")) {
           started = true;
           break;
@@ -316,11 +314,11 @@ Deno.test({
 
       await lines.cancel();
       serverProcess.kill("SIGTERM");
+      await delay(100);
     });
 
     await retry(() => Deno.remove(tmpDirName, { recursive: true }));
   },
-  sanitizeOps: false,
   sanitizeResources: false,
 });
 

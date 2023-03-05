@@ -388,7 +388,6 @@ Deno.test({
     assert(resp);
     assertEquals(resp.status, Status.OK);
     const body = await resp.text();
-    console.log(body);
     assertStringIncludes(body, "root_mw");
     assertStringIncludes(body, "layer1_mw");
     assertStringIncludes(body, "layer2_mw");
@@ -418,7 +417,6 @@ Deno.test({
     assert(resp);
     assertEquals(resp.status, Status.OK);
     const body = await resp.text();
-    console.log(body);
     assertStringIncludes(body, "root_mw");
     assertStringIncludes(body, "layer1_mw");
     assertStringIncludes(body, "layer2_mw");
