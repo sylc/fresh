@@ -1,5 +1,6 @@
 import { assertEquals } from "$std/testing/asserts.ts";
 import { TextLineStream } from "$std/streams/delimiter.ts";
+import { delay } from "$std/async/delay.ts";
 
 Deno.test("CORS should not set on GET /fresh-badge.svg", {
   sanitizeOps: false,
@@ -35,4 +36,6 @@ Deno.test("CORS should not set on GET /fresh-badge.svg", {
 
   await lines.cancel();
   serverProcess.kill("SIGTERM");
+  // await for the server to close
+  await delay(100);
 });
